@@ -16,6 +16,13 @@ class Item:
         if len(spot) == 1 and spot[0] == ' ': open_spots.append(Position(j, i))
     
     self.pos = random.choice(open_spots)
+    self.init()
+
+  def set_color(self, color):
+    self.color = color
+
+  def init(self):
+    self.set_color((255, 0, 0))
 
   def activate(self, snake):
     self.status = 'activated'

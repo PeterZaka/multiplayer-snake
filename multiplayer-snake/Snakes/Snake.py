@@ -4,19 +4,35 @@ from Position import Position
 
 class Snake:
 
-		def __init__(self, character):
+		ID = 0
+
+		def __init__(self, character, x, y):
 				self.character = character
+				self.set_pos(x, y)
 				self.direction = 'down'
 				self.size = 3
 				self.body = []
 
 				self.status = 'Alive'
+				self.set_color((0, 0, 255), (0, 0, 255))
+
+				self.ID = Snake.ID
+				Snake.ID += 2
+
+				self.init()
 
 		def set_pos(self, x, y):
 				self.pos = Position(x, y)
 
 		def set_game(self, game):
 				self.game = game
+
+		def set_color(self, head_color, tail_color):
+						self.head_color = head_color
+						self.tail_color = tail_color
+
+		def init(self):
+				pass
 
 		def update_controls(self):
 				pass
