@@ -1,18 +1,18 @@
 from Snake import Snake
 import random
 
-class Enemy_Snake(Snake):
+class Enemy_Snake2(Snake):
 		def init(self):
 				self.set_color((random.randint(0, 255), random.randint(0, 100), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 100), random.randint(0, 255)))
 				
 		def get_spot(self, x, y):
-				if y >= len(self.game.field):
-						return '#'
-				elif y < 0:
-						return '#'
-				elif x < 0:
+				if x < 0:
 						return '#'
 				elif x >= len(self.game.field[0]):
+						return '#'
+				elif y >= len(self.game.field):
+						return '#'
+				elif y < 0:
 						return '#'
 
 				return self.game.field[y][x][-1]
@@ -39,14 +39,14 @@ class Enemy_Snake(Snake):
 				for y, row in enumerate(self.game.field):
 						for x, spot in enumerate(row):
 								if spot[-1] == 'A':
-										if y > self.pos.y:
-												self.direction = 'down'
-										elif y < self.pos.y:
-												self.direction = 'up'
-										elif x > self.pos.x:
+										if x > self.pos.x:
 												self.direction = 'right'
 										elif x < self.pos.x:
 												self.direction = 'left'
+										elif y > self.pos.y:
+												self.direction = 'down'
+										elif y < self.pos.y:
+												self.direction = 'up'
 
 				if random.randint(1, 100) == 1:
 						self.direction = random.choice(['up', 'down', 'left', 'right'])

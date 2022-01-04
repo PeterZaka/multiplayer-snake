@@ -33,7 +33,7 @@ class Game:
 				for snake in snakes:
 						snake.set_game(self)
 
-				self.screen, self.WIDTH, self.HEIGHT, self.BLOCK_SIZE = screen_settings
+				self.screen, self.WIDTH, self.HEIGHT, self.BLOCK_SIZE, self.BLOCK_OFFSET = screen_settings
 
 		def update_controls(self):
 				for snake in self.snakes:
@@ -89,18 +89,19 @@ class Game:
 				self.screen.fill((0, 0, 0))
 
 				BLOCK_SIZE = self.BLOCK_SIZE
-				top = self.HEIGHT - 10 - self.FIELD_HEIGHT * (BLOCK_SIZE + 5)
-				pygame.draw.rect(self.screen, (0, 255, 0), (10, top, self.FIELD_WIDTH * (BLOCK_SIZE + 5), self.FIELD_HEIGHT * (BLOCK_SIZE + 5)))
+				TILE_SIZE = self.BLOCK_SIZE + self.BLOCK_OFFSET
+				top = self.HEIGHT - TILE_SIZE - self.FIELD_HEIGHT * TILE_SIZE
+				pygame.draw.rect(self.screen, (0, 255, 0), (TILE_SIZE, top, self.FIELD_WIDTH * TILE_SIZE, self.FIELD_HEIGHT * TILE_SIZE))
 
 				for item in self.items:
-						x, y = 10 + item.pos.x * (BLOCK_SIZE + 5), top + item.pos.y * (BLOCK_SIZE + 5)
+						x, y = TILE_SIZE + item.pos.x * TILE_SIZE, top + item.pos.y * TILE_SIZE
 						pygame.draw.rect(self.screen, item.color, (x, y, BLOCK_SIZE, BLOCK_SIZE))
 
 				for snake in self.snakes:
-						x, y = 10 + snake.pos.x * (BLOCK_SIZE + 5), top + snake.pos.y * (BLOCK_SIZE + 5)
+						x, y = TILE_SIZE + snake.pos.x * TILE_SIZE, top + snake.pos.y * TILE_SIZE
 						pygame.draw.rect(self.screen, snake.head_color, (x, y, BLOCK_SIZE, BLOCK_SIZE))
 						for part in snake.body:
-								x, y = 10 + part.x * (BLOCK_SIZE + 5), top + part.y * (BLOCK_SIZE + 5)
+								x, y = TILE_SIZE + part.x * TILE_SIZE, top + part.y * TILE_SIZE
 								pygame.draw.rect(self.screen, snake.tail_color, (x, y, BLOCK_SIZE, BLOCK_SIZE))
 
 				pygame.display.flip()
