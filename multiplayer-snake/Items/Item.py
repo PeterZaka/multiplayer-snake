@@ -14,7 +14,7 @@ class Item:
     for i, row in enumerate(field):
       for j, spot in enumerate(row):
         if len(spot) == 1 and spot[0] == ' ': open_spots.append(Position(j, i))
-    
+        
     self.pos = random.choice(open_spots)
     self.init()
 
