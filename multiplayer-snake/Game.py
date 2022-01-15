@@ -2,7 +2,7 @@ import copy
 import pygame
 
 import sys
-sys.path.insert(0, 'Items')
+sys.path.insert(0, 'multiplayer-snake/Items')
 from Item import Item
 
 class Game:

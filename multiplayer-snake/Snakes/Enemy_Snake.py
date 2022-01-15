@@ -3,7 +3,7 @@ import random
 
 class Enemy_Snake(Snake):
   def init(self):
-    self.set_color((random.randint(0, 255), random.randint(0, 100), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 100), random.randint(0, 255)))
+    self.set_color((random.randint(0, 255), random.randint(0, 100), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 200), random.randint(0, 255)))
         
   def get_spot(self, x, y):
     if y >= len(self.game.field):
