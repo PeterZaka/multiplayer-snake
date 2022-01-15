@@ -40,7 +40,13 @@ if __name__ == '__main__':
     field = (' ' * field_width + '|') * field_height
     screen_settings = (screen, SCREEN_WIDTH, SCREEN_HEIGHT, block_size * 0.8, block_size * 0.2)
 
-    snakes = [Enemy_Snake('E1', 1, 1), Enemy_Snake('E2', 18, 1)]
+    # Random field
+    # field = list(field)
+    # for i in range(field_height):
+    #   field[(field_width + 1) * i + random.randint(0, field_width - 1)] = '#'
+    # field = ''.join(field)
+
+    snakes = [Enemy_Snake('E1', 1, 1)]
 
     game = Game(snakes, field, screen_settings)
     game.display()
@@ -74,7 +80,7 @@ if __name__ == '__main__':
             pause = True
 
       if pause:
-        replit.clear()
+        print()
         print('Press m to show wanted movement')
         print('Press n to advance to next frame')
         print('Press p to unpause')

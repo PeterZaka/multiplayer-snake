@@ -18,9 +18,9 @@ class Enemy_Snake(Snake):
     return self.game.field[y][x][-1]
 
   def is_safe(self, x, y, predict):
-    spot = self.get_spot(x, y)
+    space = self.get_spot(x, y)
 
-    if spot in [' ', 'A']:
+    if space in [' ', 'A']:
       if predict:
         spots = [self.get_spot(x - 1,y), \
                  self.get_spot(x,y - 1), \

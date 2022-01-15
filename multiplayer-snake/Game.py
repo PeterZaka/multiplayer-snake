@@ -55,11 +55,15 @@ class Game:
 
     statuses = [snake.status for snake in self.snakes]
 
-    if statuses.count('Dead') == len(statuses):
-      self.status = 'Tie'
+    if len(self.snakes) > 1:
+      if statuses.count('Dead') == len(statuses):
+        self.status = 'Tie'
 
-    if statuses.count('Dead') == len(statuses) - 1:
-      self.status = self.snakes[statuses.index('Alive')].character + ' won'
+      if statuses.count('Dead') == len(statuses) - 1:
+        self.status = self.snakes[statuses.index('Alive')].character + ' won'
+    else:
+      if self.snakes[0].status == 'Dead':
+        self.status = f'Score: {self.snakes[0].size}'
 
   def update_field(self):
     self.field = copy.deepcopy(self.empty_field)
@@ -92,6 +96,12 @@ class Game:
     TILE_SIZE = self.BLOCK_SIZE + self.BLOCK_OFFSET
     top = self.HEIGHT - TILE_SIZE - self.FIELD_HEIGHT * TILE_SIZE
     pygame.draw.rect(self.screen, (0, 255, 0), (TILE_SIZE, top, self.FIELD_WIDTH * TILE_SIZE, self.FIELD_HEIGHT * TILE_SIZE))
+
+    for i in range(len(self.field)):
+      for j in range(len(self.field[0])):
+        if self.field[i][j][-1] == '#':
+          x, y = TILE_SIZE + j * TILE_SIZE, top + i * TILE_SIZE
+          pygame.draw.rect(self.screen, (0, 0, 0), (x, y, BLOCK_SIZE, BLOCK_SIZE))
 
     for item in self.items:
       x, y = TILE_SIZE + item.pos.x * TILE_SIZE, top + item.pos.y * TILE_SIZE
