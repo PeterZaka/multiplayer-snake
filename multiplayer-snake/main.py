@@ -8,6 +8,7 @@ from Player_Snake import Player_Snake
 from Enemy_Snake import Enemy_Snake
 
 from Game import Game
+from common import *
 
 debug = True
 
@@ -41,33 +42,30 @@ if __name__ == '__main__':
     screen_settings = (screen, SCREEN_WIDTH, SCREEN_HEIGHT, block_size * 0.8, block_size * 0.2)
 
     # Random field
-    # field = list(field)
-    # for i in range(field_height):
-    #   field[(field_width + 1) * i + random.randint(0, field_width - 1)] = '#'
-    # field = ''.join(field)
+    field = list(field)
+    for i in range(field_height):
+      field[(field_width + 1) * i + random.randint(0, field_width - 1)] = '#'
+    field = ''.join(field)
 
     snakes = [Enemy_Snake('E1', 1, 1)]
+    snakes.append(Enemy_Snake('E2', 18, 1))
+    snakes.append(Enemy_Snake('E3', 1, 18))
+    snakes.append(Enemy_Snake('E4', 18, 18))
 
     game = Game(snakes, field, screen_settings)
     game.display()
     while(game.status == 'Ongoing'):
-      clock.tick(10)
+      if not pause: clock.tick(10)
 
       game.update_controls()
       if debug_movement:
         print()
         for snake in game.snakes:
-          print(f'{snake.character} {snake.direction}')
+          if snake.status != 'Dead':
+            print(f'{snake.character} {snake.direction}')
         print('Press n to continue')
-        while(True):
-          for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-              if event.key == pygame.K_n:
-                debug_movement = False
-                break
-          else:
-            continue
-          break
+        waitUntilKey(pygame.K_n)
+        debug_movement = False
 
       game.update_movements()
       game.update_field()
@@ -84,20 +82,12 @@ if __name__ == '__main__':
         print('Press m to show wanted movement')
         print('Press n to advance to next frame')
         print('Press p to unpause')
-        while(True):
-          for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-              if event.key == pygame.K_p:
-                pause = False
-                break
-              if event.key == pygame.K_n:
-                break
-              if event.key == pygame.K_m:
-                debug_movement = True
-                break
-          else:
-            continue
-          break
+        key_pressed = waitUntilKey(pygame.K_p, pygame.K_n, pygame.K_m)
+        if key_pressed == pygame.K_p:
+          print('\nGame unpaused')
+          pause = False
+        elif key_pressed == pygame.K_m:
+          debug_movement = True
 
       pygame.event.pump()
 
