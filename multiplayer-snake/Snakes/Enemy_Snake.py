@@ -3,7 +3,12 @@ import random
 
 class Enemy_Snake(Snake):
   def init(self):
-    self.set_color((random.randint(0, 255), random.randint(0, 100), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 200), random.randint(0, 255)))
+    body_color = (random.randint(10, 255), random.randint(0, 255), random.randint(10, 255))
+    tail_color = []
+    for i in range(3):
+      tail_color.append(max(0, min(255, body_color[i] + random.uniform(-100, 100))))
+    self.set_color(body_color, tail_color)
+    self.header = random.randint(0, 1)
         
   def get_spot(self, x, y):
     if y >= len(self.game.field):
@@ -35,20 +40,34 @@ class Enemy_Snake(Snake):
 
   def update_controls(self):
     #field = [[spot[-1] for spot in row] for row in self.field]
+    # field = [[spot[-1] for spot in row] for row in self.game.field]
+    # for row in field:
+    #     print('|' + ''.join([str(i) for i in row]) + '|')
+    # print()
 
     for y, row in enumerate(self.game.field):
       for x, spot in enumerate(row):
         if spot[-1] == 'A':
-          if y > self.pos.y:
-            self.direction = 'down'
-          elif y < self.pos.y:
-            self.direction = 'up'
-          elif x > self.pos.x:
-            self.direction = 'right'
-          elif x < self.pos.x:
-            self.direction = 'left'
+          if self.header:
+            if y > self.pos.y:
+              self.direction = 'down'
+            elif y < self.pos.y:
+              self.direction = 'up'
+            elif x > self.pos.x:
+              self.direction = 'right'
+            elif x < self.pos.x:
+              self.direction = 'left'
+          else:
+            if x > self.pos.x:
+              self.direction = 'right'
+            elif x < self.pos.x:
+              self.direction = 'left'
+            elif y > self.pos.y:
+              self.direction = 'down'
+            elif y < self.pos.y:
+              self.direction = 'up'
 
-    if random.randint(1, 100) == 1:
+    if random.randint(1, 1000) == 1:
       self.direction = random.choice(['up', 'down', 'left', 'right'])
 
     predict = True

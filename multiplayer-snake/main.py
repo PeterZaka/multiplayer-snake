@@ -1,6 +1,7 @@
 import pygame
 import random
 import replit
+from time import sleep
 
 import sys
 sys.path.insert(0, 'multiplayer-snake/Snakes')
@@ -23,8 +24,10 @@ if __name__ == '__main__':
   pygame.init()
   pygame.font.init()
 
-  SCREEN_WIDTH = 200
-  SCREEN_HEIGHT = 200
+  MAX_SIZE = min([pygame.display.Info().current_h, pygame.display.Info().current_w]) - 25
+
+  SCREEN_WIDTH = MAX_SIZE
+  SCREEN_HEIGHT = MAX_SIZE
 
   field_width = 20
   field_height = 20
@@ -36,26 +39,32 @@ if __name__ == '__main__':
 
   pause = False
   debug_movement = False
+  unbound = False
 
   while(True):
     field = (' ' * field_width + '|') * field_height
     screen_settings = (screen, SCREEN_WIDTH, SCREEN_HEIGHT, block_size * 0.8, block_size * 0.2)
 
     # Random field
-    field = list(field)
-    for i in range(field_height):
-      field[(field_width + 1) * i + random.randint(0, field_width - 1)] = '#'
-    field = ''.join(field)
+    if random.randint(0, 1):
+      field = list(field)
+      for i in range(1, field_height - 1):
+        field[(field_width + 1) * i + random.randint(1, field_width - 2)] = '#'
+      field = ''.join(field)
 
     snakes = [Enemy_Snake('E1', 1, 1)]
-    snakes.append(Enemy_Snake('E2', 18, 1))
-    snakes.append(Enemy_Snake('E3', 1, 18))
-    snakes.append(Enemy_Snake('E4', 18, 18))
+    snakes.append(Enemy_Snake('E2', field_width - 2, 1))
+    if random.randint(0, 1):
+      snakes.append(Enemy_Snake('E3', 1, field_height - 2))
+      snakes.append(Enemy_Snake('E4', field_width - 2, field_height - 2))
 
     game = Game(snakes, field, screen_settings)
     game.display()
+
+    game_counter = 0
     while(game.status == 'Ongoing'):
-      if not pause: clock.tick(10)
+      game_counter += 1
+      if not (pause or unbound): clock.tick(10)
 
       game.update_controls()
       if debug_movement:
@@ -76,6 +85,8 @@ if __name__ == '__main__':
         if event.type == pygame.KEYDOWN:
           if event.key == pygame.K_p:
             pause = True
+          if event.key == pygame.K_u:
+            unbound = not unbound
 
       if pause:
         print()
@@ -91,8 +102,21 @@ if __name__ == '__main__':
 
       pygame.event.pump()
 
+    print(game_counter)
+
+    if game.status == 'Tie' or len(snakes) == 1:
+      text_color = (0, 0, 0)
+      back_color = (255, 255, 255)
+    else:
+      statuses = [snake.status for snake in snakes]
+      text_color = snakes[statuses.index('Alive')].tail_color
+      back_color = []
+      for color in text_color:
+        back_color.append(max(0, 255 - color))
+
     font = pygame.font.SysFont('Comic Sans MS', SCREEN_WIDTH // 10)
-    text = font.render(game.status, True, (255, 255, 255), (0, 0, 0))
+
+    text = font.render(game.status, True, back_color, text_color)
  
     textRect = text.get_rect()
     textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT * 4 // 5)
@@ -100,11 +124,6 @@ if __name__ == '__main__':
     screen.blit(text, textRect)
     pygame.display.update()
  
-    while(True):
-      for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-          if event.key == pygame.K_SPACE:
-            break
-      else:
-        continue
-      break
+    sleep(3)
+    # if waitUntilKey(pygame.K_SPACE, pygame.K_u) == pygame.K_u:
+    #   unbound = not unbound

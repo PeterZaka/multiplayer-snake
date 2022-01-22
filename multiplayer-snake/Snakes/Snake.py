@@ -66,7 +66,6 @@ class Snake:
 
     if len(chosen_item) != 0:
       chosen_item[0].activate(self)
-
-    if len(spot) > 2:
-      if len(chosen_item) == 0 or len(spot) > 3:
+    else:
+      if any([True for item in spot if not item in [' ', self.ID]]):
         self.status = 'Dead'

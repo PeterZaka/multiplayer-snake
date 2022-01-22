@@ -84,34 +84,39 @@ class Game:
         else:
           self.field[piece.y][piece.x].append(snake.ID + 1)
 
+    # for row in self.field:
+    #   for spot in row:
+    #     print(spot[-1], end='')
+    #   print()
+#    print(self.field)
+
   def display(self):
-  #field = [[spot[-1] for spot in row] for row in self.field]
-  #for row in field:
-  #		print('|' + ''.join([str(i) for i in row]) + '|')
-  #print()
+    # field = [[spot[-1] for spot in row] for row in self.field]
+    # for row in field:
+    #     print('|' + ''.join([str(i) for i in row]) + '|')
+    # print()
 
     self.screen.fill((0, 0, 0))
 
     BLOCK_SIZE = self.BLOCK_SIZE
     TILE_SIZE = self.BLOCK_SIZE + self.BLOCK_OFFSET
-    top = self.HEIGHT - TILE_SIZE - self.FIELD_HEIGHT * TILE_SIZE
-    pygame.draw.rect(self.screen, (0, 255, 0), (TILE_SIZE, top, self.FIELD_WIDTH * TILE_SIZE, self.FIELD_HEIGHT * TILE_SIZE))
+    pygame.draw.rect(self.screen, (0, 255, 0), (TILE_SIZE, TILE_SIZE, self.FIELD_WIDTH * TILE_SIZE, self.FIELD_HEIGHT * TILE_SIZE))
 
     for i in range(len(self.field)):
       for j in range(len(self.field[0])):
         if self.field[i][j][-1] == '#':
-          x, y = TILE_SIZE + j * TILE_SIZE, top + i * TILE_SIZE
+          x, y = 1.125 * TILE_SIZE + j * TILE_SIZE, 1.125 * TILE_SIZE + i * TILE_SIZE
           pygame.draw.rect(self.screen, (0, 0, 0), (x, y, BLOCK_SIZE, BLOCK_SIZE))
 
     for item in self.items:
-      x, y = TILE_SIZE + item.pos.x * TILE_SIZE, top + item.pos.y * TILE_SIZE
+      x, y = 1.125 * TILE_SIZE + item.pos.x * TILE_SIZE, 1.125 * TILE_SIZE + item.pos.y * TILE_SIZE
       pygame.draw.rect(self.screen, item.color, (x, y, BLOCK_SIZE, BLOCK_SIZE))
 
     for snake in self.snakes:
-      x, y = TILE_SIZE + snake.pos.x * TILE_SIZE, top + snake.pos.y * TILE_SIZE
+      x, y = 1.125 * TILE_SIZE + snake.pos.x * TILE_SIZE, 1.125 * TILE_SIZE + snake.pos.y * TILE_SIZE
       pygame.draw.rect(self.screen, snake.head_color, (x, y, BLOCK_SIZE, BLOCK_SIZE))
       for part in snake.body:
-        x, y = TILE_SIZE + part.x * TILE_SIZE, top + part.y * TILE_SIZE
+        x, y = 1.125 * TILE_SIZE + part.x * TILE_SIZE, 1.125 * TILE_SIZE + part.y * TILE_SIZE
         pygame.draw.rect(self.screen, snake.tail_color, (x, y, BLOCK_SIZE, BLOCK_SIZE))
 
     pygame.display.flip()
