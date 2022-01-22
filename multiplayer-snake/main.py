@@ -7,6 +7,7 @@ import sys
 sys.path.insert(0, 'multiplayer-snake/Snakes')
 from Player_Snake import Player_Snake
 from Enemy_Snake import Enemy_Snake
+from Tutorial_Snake import my_snake
 
 from Game import Game
 from common import *
@@ -45,27 +46,45 @@ if __name__ == '__main__':
     field = (' ' * field_width + '|') * field_height
     screen_settings = (screen, SCREEN_WIDTH, SCREEN_HEIGHT, block_size * 0.8, block_size * 0.2)
 
-    # Random field
-    if random.randint(0, 1):
-      field = list(field)
-      for i in range(1, field_height - 1):
-        field[(field_width + 1) * i + random.randint(1, field_width - 2)] = '#'
-      field = ''.join(field)
+    snakes = [my_snake('me', 1, 1)]
+    snakes.append(Enemy_Snake('E', 18, 1))
+    snakes.append(Enemy_Snake('E', 1, 18))
+    snakes.append(Enemy_Snake('E', 18, 18))
 
-    snakes = [Enemy_Snake('E1', 1, 1)]
-    snakes.append(Enemy_Snake('E2', field_width - 2, 1))
-    if random.randint(0, 1):
-      snakes.append(Enemy_Snake('E3', 1, field_height - 2))
-      snakes.append(Enemy_Snake('E4', field_width - 2, field_height - 2))
+    # field = list(field)
+    # for i in range(1, field_height - 1):
+    #   field[(field_width + 1) * i + random.randint(1, field_width - 2)] = '#'
+    # field = ''.join(field)
 
     game = Game(snakes, field, screen_settings)
     game.display()
 
-    game_counter = 0
     while(game.status == 'Ongoing'):
-      game_counter += 1
+      
+      for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+          if event.key == pygame.K_p:
+            pause = True
+          elif event.key == pygame.K_u:
+            unbound = not unbound
+          elif event.key == pygame.K_e:
+            for snake in game.snakes:
+              snake.status = 'Dead'
+
+      if pause:
+        print('\nPress m to show wanted movement')
+        print('Press n to advance to next frame')
+        print('Press p to unpause')
+        key_pressed = waitUntilKey(pygame.K_p, pygame.K_n, pygame.K_m)
+        if key_pressed == pygame.K_p:
+          print('\nGame unpaused')
+          pause = False
+        elif key_pressed == pygame.K_m:
+          debug_movement = True
+
       if not (pause or unbound): clock.tick(10)
 
+      game.update_field()
       game.update_controls()
       if debug_movement:
         print()
@@ -77,32 +96,10 @@ if __name__ == '__main__':
         debug_movement = False
 
       game.update_movements()
-      game.update_field()
       game.update_collisions()
       game.display()
 
-      for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-          if event.key == pygame.K_p:
-            pause = True
-          if event.key == pygame.K_u:
-            unbound = not unbound
-
-      if pause:
-        print()
-        print('Press m to show wanted movement')
-        print('Press n to advance to next frame')
-        print('Press p to unpause')
-        key_pressed = waitUntilKey(pygame.K_p, pygame.K_n, pygame.K_m)
-        if key_pressed == pygame.K_p:
-          print('\nGame unpaused')
-          pause = False
-        elif key_pressed == pygame.K_m:
-          debug_movement = True
-
       pygame.event.pump()
-
-    print(game_counter)
 
     if game.status == 'Tie' or len(snakes) == 1:
       text_color = (0, 0, 0)
@@ -124,6 +121,8 @@ if __name__ == '__main__':
     screen.blit(text, textRect)
     pygame.display.update()
  
-    sleep(3)
-    # if waitUntilKey(pygame.K_SPACE, pygame.K_u) == pygame.K_u:
-    #   unbound = not unbound
+    key_pressed = waitUntilKey(pygame.K_SPACE, pygame.K_u, pygame.K_p)
+    if key_pressed == pygame.K_u:
+      unbound = not unbound
+    elif key_pressed == pygame.K_p:
+      pause = not pause

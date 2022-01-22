@@ -68,9 +68,6 @@ class Game:
   def update_field(self):
     self.field = copy.deepcopy(self.empty_field)
 
-    for item in self.items:
-      self.field[item.pos.y][item.pos.x].append(item.character)
-
     for snake in self.snakes:
       if not (snake.pos.y < 0 or snake.pos.y >= len(self.empty_field) or
       snake.pos.x < 0 or snake.pos.x >= len(self.empty_field[0])):
@@ -83,6 +80,9 @@ class Game:
           self.field[piece.y][piece.x].append('#')
         else:
           self.field[piece.y][piece.x].append(snake.ID + 1)
+
+    for item in self.items:
+      self.field[item.pos.y][item.pos.x].append(item.character)
 
     # for row in self.field:
     #   for spot in row:

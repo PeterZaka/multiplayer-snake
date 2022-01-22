@@ -14,7 +14,7 @@ class Snake:
     self.body = []
 
     self.status = 'Alive'
-    self.set_color((0, 0, 255), (0, 0, 255))
+    self.set_color((0, 0, 200), (0, 0, 255))
 
     self.ID = Snake.ID
     Snake.ID += 2
@@ -62,7 +62,7 @@ class Snake:
       return
 
     spot = self.game.field[self.pos.y][self.pos.x]
-    chosen_item = [item for item in self.game.items if item.character == spot[1]]
+    chosen_item = [item for item in self.game.items if item.character in spot]
 
     if len(chosen_item) != 0:
       chosen_item[0].activate(self)
